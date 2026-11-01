@@ -121,8 +121,8 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); ou
 .icon-btn svg { width: 20px; height: 20px; }
 .progress { text-align: center; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .progress b { color: var(--ink); font-weight: 600; }
-.dots { display: flex; justify-content: center; gap: 5px; margin-top: 5px; }
-.dots i { width: 14px; height: 5px; border-radius: 3px; background: var(--line); }
+.dots { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 3px; margin: 5px auto 0; max-width: 240px; }
+.dots i { height: 5px; border-radius: 3px; background: var(--line); }
 .dots i.hit { background: var(--hit); }
 .dots i.miss { background: var(--muted); opacity: .45; }
 .dots i.now { background: var(--ink); }
@@ -236,7 +236,7 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); ou
   <section class="screen" id="home">
     <header class="brand">
       <h1><span class="a" id="hA">Thức</span><span class="h">,</span> <span class="h">hay</span> <span class="b" id="hB">Ngân</span><span class="h">?</span></h1>
-      <p>Một người bí mật chọn câu trả lời về chính mình, người kia đoán. Mười câu, xem ai hiểu ai hơn.</p>
+      <p>Một người bí mật chọn câu trả lời về chính mình, người kia đoán. 24 câu, xem ai hiểu ai hơn.</p>
     </header>
 
     <div>
@@ -251,7 +251,7 @@ button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); ou
     <div class="stack">
       <button class="start" id="startBtn" type="button">
         <strong id="startTitle">Bắt đầu ván mới</strong>
-        <span id="startSub">10 câu · mỗi người đoán 5 câu · khoảng 15 phút</span>
+        <span id="startSub">24 câu · mỗi người đoán 12 câu · khoảng 30 phút</span>
       </button>
       <div class="row-links">
         <button class="ghost" id="openHistory" type="button">Lịch sử điểm</button>
@@ -351,9 +351,29 @@ const QS = [
   { q: "Điều {X} trân trọng nhất ở mối quan hệ này?", o: ["Sự bình yên", "Tiếng cười", "Sự tin tưởng", "Được là chính mình"] },
   { q: "Có tin vui, {X} kể cho ai đầu tiên?", o: ["Người yêu", "Gia đình", "Bạn thân", "Đăng lên mạng"] },
   { q: "App {X} mở nhiều nhất mỗi ngày?", o: ["TikTok", "Facebook, Messenger", "Instagram", "YouTube"] },
-  { q: "Năm tới, {X} muốn hai đứa cùng làm gì nhất?", o: ["Đi du lịch xa", "Học chung một thứ mới", "Ra mắt gia đình hai bên", "Tiết kiệm cho một mục tiêu"] }
+  { q: "Năm tới, {X} muốn hai đứa cùng làm gì nhất?", o: ["Đi du lịch xa", "Học chung một thứ mới", "Ra mắt gia đình hai bên", "Tiết kiệm cho một mục tiêu"] },
+  { q: "Đi mua sắm, {X} là kiểu người?", o: ["Lướt nhanh, mua lẹ", "Ngắm cả buổi mới mua", "Chỉ mua online", "Đi theo xách đồ"] },
+  { q: "{X} sẽ chọn siêu năng lực nào?", o: ["Bay", "Dịch chuyển tức thời", "Đọc suy nghĩ", "Quay ngược thời gian"] },
+  { q: "Món ăn vặt {X} không cưỡng lại được?", o: ["Bánh tráng trộn", "Snack khoai tây", "Chè", "Xiên que chiên"] },
+  { q: "Vừa thức dậy, {X} cần gì đầu tiên?", o: ["Cà phê", "Lướt điện thoại", "Ăn sáng", "Ngủ thêm 5 phút"] },
+  { q: "Nỗi sợ nào của {X} lớn nhất?", o: ["Độ cao", "Bóng tối", "Nước sâu", "Nói trước đám đông"] },
+  { q: "Xem phim kinh dị, {X} sẽ?", o: ["Xem tỉnh bơ", "Che mắt nhìn qua kẽ tay", "Hét to nhất phòng", "Nhất quyết không xem"] },
+  { q: "{X} muốn nuôi con gì nhất?", o: ["Mèo", "Chó", "Cá", "Không muốn nuôi con nào"] },
+  { q: "{X} hay để quên thứ gì nhất?", o: ["Chìa khóa", "Ví", "Điện thoại", "Mật khẩu"] },
+  { q: "Được nghỉ phép một tuần, {X} chọn?", o: ["Ra biển", "Lên núi", "Về quê", "Ở nhà ngủ"] },
+  { q: "Vào quán cà phê, {X} thích ngồi đâu?", o: ["Cạnh cửa sổ", "Góc khuất", "Ngoài trời", "Chỗ có ổ cắm điện"] },
+  { q: "Kiểu nhắn tin {X} thấy khó chịu nhất?", o: ["Trả lời mỗi chữ “ừ”", "Xem mà không trả lời", "Mỗi tin một chữ", "Viết tắt khó hiểu"] },
+  { q: "{X} thường xin lỗi bằng cách nào?", o: ["Nói thẳng “xin lỗi”", "Mua đồ ăn ngon", "Làm như chưa có gì", "Nhắn một tin thật dài"] },
+  { q: "{X} tự tin nhất về điều gì ở bản thân?", o: ["Ngoại hình", "Đầu óc", "Tính cách", "Tài lẻ"] },
+  { q: "Sinh nhật, {X} muốn được đón thế nào?", o: ["Tiệc đông vui", "Hai đứa riêng tư", "Đi chơi xa", "Không cần gì đặc biệt"] },
+  { q: "Trên mạng xã hội, {X} hay đăng gì?", o: ["Ảnh selfie", "Đồ ăn", "Chia sẻ bài người khác", "Gần như không đăng"] },
+  { q: "{X} nhịn dùng điện thoại được bao lâu?", o: ["Dưới 1 tiếng", "Nửa ngày", "Một ngày", "Cả tuần không sao"] },
+  { q: "Ngày mưa, {X} muốn làm gì nhất?", o: ["Ngủ nướng", "Uống gì nóng, đọc sách", "Xem phim", "Đi dạo dưới mưa"] },
+  { q: "Ngoài người yêu, {X} hay tâm sự với ai?", o: ["Mẹ", "Bạn thân", "Anh chị em", "Giữ trong lòng"] },
+  { q: "{X} thích được chăm sóc theo cách nào?", o: ["Được nấu cho ăn", "Được đưa đón", "Được nhắn hỏi han", "Được xoa bóp"] },
+  { q: "Bài học lớn nhất năm nay của {X} là về?", o: ["Công việc", "Tiền bạc", "Các mối quan hệ", "Chính bản thân"] }
 ];
-const ROUND = 10;
+const ROUND = 24;
 const KEYS = ["A", "B", "C", "D"];
 const KEY = "thuchayngan.v1";
 const $ = id => document.getElementById(id);
@@ -584,7 +604,7 @@ function renderHome() {
   const g = store.game;
   const inProgress = g && g.phase !== "done" && (g.i > 0 || g.phase !== "hand1");
   $("startTitle").textContent = inProgress ? "Chơi tiếp" : "Bắt đầu ván mới";
-  $("startSub").textContent = inProgress ? `Đang ở câu ${g.i + 1}/${ROUND} · ${a} ${g.score[0]} – ${g.score[1]} ${b}` : "10 câu · mỗi người đoán 5 câu · khoảng 15 phút";
+  $("startSub").textContent = inProgress ? `Đang ở câu ${g.i + 1}/${ROUND} · ${a} ${g.score[0]} – ${g.score[1]} ${b}` : "24 câu · mỗi người đoán 12 câu · khoảng 30 phút";
   $("askNew").hidden = !inProgress;
   $("newConfirm").hidden = true;
   const h = store.history;

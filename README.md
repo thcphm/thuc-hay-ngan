@@ -2,7 +2,7 @@
 
 Trò đoán ý nhau cho hai người, dùng chung một điện thoại.
 
-**Cách chơi:** mỗi câu hỏi về một người. Người đó bí mật chọn câu trả lời thật của mình, rồi đưa máy cho người kia đoán. Đoán trúng được 1 điểm. Một ván có 10 câu, mỗi người đoán 5 câu. Hết ván, app chấm "độ hiểu nhau" và lưu vào lịch sử để so điểm sau vài tháng.
+**Cách chơi:** mỗi câu hỏi về một người. Người đó bí mật chọn câu trả lời thật của mình, rồi đưa máy cho người kia đoán. Đoán trúng được 1 điểm. Một ván có 24 câu, mỗi người đoán 12 câu. Hết ván, app chấm "độ hiểu nhau" và lưu vào lịch sử để so điểm sau vài tháng.
 
 ## Tải app Android
 
@@ -10,7 +10,7 @@ Tải [ThucHayNgan.apk](../../releases/latest/download/ThucHayNgan.apk) ở mụ
 
 ## Cấu trúc
 
-- `www/index.html`: toàn bộ app, gồm 40 câu hỏi trắc nghiệm
+- `www/index.html`: toàn bộ app, gồm 60 câu hỏi trắc nghiệm
 - `assets/`: icon T&N nền xanh và màn hình chờ
 - `.github/workflows/build-apk.yml`: mỗi lần đẩy code lên `main`, GitHub tự build APK và tạo bản release mới
 
