@@ -1,0 +1,24 @@
+{
+  "name": "thuc-hay-ngan",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Thức, hay Ngân?: trò đoán ý nhau cho cặp đôi.",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/copy-fonts.mjs",
+    "icons": "capacitor-assets generate --android",
+    "sync": "npm run build && cap sync android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/app": "^7.0.0",
+    "@capacitor/core": "^7.0.0",
+    "@capacitor/status-bar": "^7.0.0",
+    "@fontsource/be-vietnam-pro": "^5.0.0",
+    "@fontsource/lora": "^5.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^7.0.0"
+  }
+}

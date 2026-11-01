@@ -1,0 +1,9 @@
+{
+  "appId": "com.tn.thuchayngan",
+  "appName": "Thức, hay Ngân?",
+  "webDir": "www",
+  "backgroundColor": "#EFF3F2",
+  "android": {
+    "adjustMarginsForEdgeToEdge": "force"
+  }
+}

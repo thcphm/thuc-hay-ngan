@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Thức, hay Ngân?</title>
+<meta name="theme-color" content="#EFF3F2">
+<link rel="stylesheet" href="vendor/lora/500.css">
+<link rel="stylesheet" href="vendor/lora/500-italic.css">
+<link rel="stylesheet" href="vendor/lora/600.css">
+<link rel="stylesheet" href="vendor/be-vietnam-pro/400.css">
+<link rel="stylesheet" href="vendor/be-vietnam-pro/500.css">
+<link rel="stylesheet" href="vendor/be-vietnam-pro/600.css">
+<style>
+/* Layout: one-screen phone app, pass-the-phone game. Each person owns a color (Thức indigo, Ngân rose);
+   every screen is tinted by whoever is holding the phone. */
+:root {
+  --bg: #EFF3F2;
+  --surface: #FFFFFF;
+  --ink: #14262A;
+  --muted: #5E7377;
+  --line: #D5E0DE;
+  --accent: #13797A;
+  --accent-ink: #FFFFFF;
+  --p0: #33489E; --p0-ink: #FFFFFF;
+  --p1: #D35A74; --p1-ink: #FFFFFF;
+  --hit: #13797A; --hit-ink: #FFFFFF;
+
+  --f-display: "Lora", Georgia, "Times New Roman", serif;
+  --f-body: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1B1D; --surface: #172729; --ink: #E6F0EE; --muted: #8FA6A8; --line: #26393C;
+    --accent: #4CC3B5; --accent-ink: #062421;
+    --p0: #8097EA; --p0-ink: #0D1530;
+    --p1: #F08CA0; --p1-ink: #3A0C17;
+    --hit: #4CC3B5; --hit-ink: #062421;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1B1D; --surface: #172729; --ink: #E6F0EE; --muted: #8FA6A8; --line: #26393C;
+  --accent: #4CC3B5; --accent-ink: #062421;
+  --p0: #8097EA; --p0-ink: #0D1530;
+  --p1: #F08CA0; --p1-ink: #3A0C17;
+  --hit: #4CC3B5; --hit-ink: #062421;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); height: 100%; }
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body {
+  margin: 0; overscroll-behavior: none;
+  background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: 15px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  -webkit-tap-highlight-color: transparent;
+}
+button { font: inherit; color: inherit; cursor: pointer; -webkit-user-select: none; user-select: none; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.app { height: 100%; max-width: 460px; margin: 0 auto; display: flex; flex-direction: column; }
+.screen { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+
+/* ---------- Home ---------- */
+#home { overflow-y: auto; padding-block: 28px 32px; gap: 26px; }
+.brand h1 { font-family: var(--f-display); font-weight: 600; font-size: 42px; line-height: 1.08; margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+.brand h1 .a { color: var(--p0); }
+.brand h1 .b { color: var(--p1); font-style: italic; font-weight: 500; }
+.brand h1 .h { font-style: italic; font-weight: 500; color: var(--muted); font-size: .7em; }
+.brand p { margin: 10px 0 0; color: var(--muted); max-width: 34ch; text-wrap: pretty; }
+.label { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+
+.names { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; }
+.names input {
+  width: 100%; min-width: 0; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+  border-radius: 14px; padding: 12px 14px; font: inherit; font-weight: 600;
+}
+.names input#nameA { border-left: 4px solid var(--p0); }
+.names input#nameB { border-left: 4px solid var(--p1); }
+.names .amp { font-family: var(--f-display); font-style: italic; font-size: 22px; color: var(--muted); }
+
+.start {
+  display: flex; flex-direction: column; gap: 6px; text-align: left; width: 100%;
+  border: 0; border-radius: 22px; padding: 20px 20px 18px; color: #FFFFFF;
+  background: linear-gradient(115deg, #33489E 0%, #13797A 60%, #5FB8A5 100%);
+}
+.start strong { font-family: var(--f-display); font-size: 24px; font-weight: 600; }
+.start span { font-size: 14px; opacity: .95; }
+.start:active { transform: scale(.985); }
+.stack { display: flex; flex-direction: column; gap: 10px; }
+
+.rules { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.rules li { display: grid; grid-template-columns: 22px 1fr; gap: 10px; color: var(--muted); font-size: 14px; }
+.rules li b { color: var(--ink); font-weight: 600; }
+
+.row-links { display: flex; flex-wrap: wrap; gap: 10px; }
+.ghost { border: 1px solid var(--line); background: transparent; border-radius: 999px; padding: 9px 16px; font-size: 14px; font-weight: 500; }
+.ghost.danger { color: var(--p1); }
+.confirm { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); }
+.confirm .yes { background: var(--p1); color: var(--p1-ink); border: 0; border-radius: 999px; padding: 9px 16px; font-weight: 600; }
+.foot { font-size: 12px; color: var(--muted); margin: 0; }
+
+.last {
+  display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: center;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 14px 16px;
+}
+.last .p { font-family: var(--f-display); font-weight: 600; font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; }
+.last small { display: block; color: var(--muted); font-size: 13px; }
+.last b { font-weight: 600; }
+
+/* ---------- Game ---------- */
+#game, #history { padding-block: 12px 18px; gap: 12px; }
+.topbar { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; }
+.topbar h2 { margin: 0; text-align: center; font-family: var(--f-display); font-weight: 600; font-size: 22px; }
+.icon-btn { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); display: grid; place-items: center; padding: 0; }
+.icon-btn svg { width: 20px; height: 20px; }
+.progress { text-align: center; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.progress b { color: var(--ink); font-weight: 600; }
+.dots { display: flex; justify-content: center; gap: 5px; margin-top: 5px; }
+.dots i { width: 14px; height: 5px; border-radius: 3px; background: var(--line); }
+.dots i.hit { background: var(--hit); }
+.dots i.miss { background: var(--muted); opacity: .45; }
+.dots i.now { background: var(--ink); }
+
+.scores { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.score {
+  display: flex; justify-content: space-between; align-items: center; gap: 8px;
+  border-radius: 14px; padding: 8px 14px; font-size: 14px; font-weight: 500;
+}
+.score b { font-family: var(--f-display); font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.score.p0 { background: var(--p0); color: var(--p0-ink); }
+.score.p1 { background: var(--p1); color: var(--p1-ink); }
+.score span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+
+.stage { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
+
+.handoff { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; text-align: center; }
+.avatar {
+  width: 104px; height: 104px; border-radius: 50%; display: grid; place-items: center;
+  font-family: var(--f-display); font-size: 44px; font-weight: 600;
+}
+.avatar.p0 { background: var(--p0); color: var(--p0-ink); }
+.avatar.p1 { background: var(--p1); color: var(--p1-ink); }
+.handoff h2 { font-family: var(--f-display); font-weight: 600; font-size: 28px; line-height: 1.2; margin: 0; text-wrap: balance; }
+.handoff p { margin: 0; color: var(--muted); max-width: 30ch; text-wrap: pretty; }
+.eyes { font-size: 13px; color: var(--muted); border: 1px dashed var(--line); border-radius: 999px; padding: 6px 14px; }
+
+.qhead { display: flex; flex-direction: column; gap: 8px; padding-top: 6px; }
+.role { display: inline-flex; align-self: flex-start; font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; border-radius: 999px; padding: 4px 10px; }
+.role.p0 { background: var(--p0); color: var(--p0-ink); }
+.role.p1 { background: var(--p1); color: var(--p1-ink); }
+.qhead h2 { font-family: var(--f-display); font-weight: 500; font-size: clamp(23px, 6.6vw, 28px); line-height: 1.3; margin: 0; text-wrap: balance; }
+
+.options { display: flex; flex-direction: column; gap: 10px; }
+.opt {
+  display: grid; grid-template-columns: 30px 1fr; align-items: center; gap: 12px; text-align: left;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px;
+  font-size: 16px; font-weight: 500; transition: border-color .15s, box-shadow .15s;
+}
+.opt .k { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--line); font-size: 13px; font-weight: 600; color: var(--muted); }
+.opt.sel { border-color: var(--sel); box-shadow: inset 0 0 0 1px var(--sel); }
+.opt.sel .k { background: var(--sel); color: var(--sel-ink); border-color: var(--sel); }
+
+.verdict { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px; padding-top: 10px; }
+.badge { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; }
+.badge svg { width: 36px; height: 36px; }
+.verdict.hit .badge { background: var(--hit); color: var(--hit-ink); }
+.verdict.miss .badge { background: var(--line); color: var(--muted); }
+.verdict h2 { font-family: var(--f-display); font-weight: 600; font-size: 30px; margin: 0; }
+.verdict p { margin: 0; color: var(--muted); }
+.qrecap { margin: 0; text-align: center; font-family: var(--f-display); font-style: italic; font-size: 17px; color: var(--muted); text-wrap: balance; }
+.compare { display: flex; flex-direction: column; gap: 10px; }
+.compare .row {
+  display: grid; grid-template-columns: 6px 1fr; gap: 14px; align-items: stretch;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 12px 16px 12px 12px;
+}
+.compare .bar { border-radius: 3px; }
+.compare small { display: block; color: var(--muted); font-size: 12px; }
+.compare span { font-weight: 600; font-size: 16px; }
+.talk { margin: 0; text-align: center; font-size: 14px; color: var(--muted); text-wrap: pretty; }
+
+.result-hero { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 4px; padding-top: 14px; }
+.result-hero .lbl { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.result-hero .pct { font-family: var(--f-display); font-weight: 600; font-size: 84px; line-height: 1; font-variant-numeric: tabular-nums; color: var(--accent); }
+.result-hero .pct small { font-size: 38px; }
+.result-hero h2 { font-family: var(--f-display); font-weight: 500; font-style: italic; font-size: 22px; margin: 8px 0 0; text-wrap: balance; }
+.result-hero p { margin: 0; color: var(--muted); font-size: 14px; }
+.meters { display: flex; flex-direction: column; gap: 14px; }
+.meter { display: flex; flex-direction: column; gap: 6px; }
+.meter .top { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; }
+.meter .top b { font-variant-numeric: tabular-nums; }
+.track { height: 10px; border-radius: 5px; background: var(--line); overflow: hidden; }
+.track i { display: block; height: 100%; border-radius: 5px; transition: width .8s ease; }
+.crown { text-align: center; margin: 0; font-size: 15px; }
+.crown b { font-weight: 600; }
+
+.controls { display: grid; grid-template-columns: 1fr; gap: 10px; }
+.controls.two { grid-template-columns: 1fr 1fr; }
+.controls button { height: 56px; border-radius: 18px; border: 1px solid var(--line); background: var(--surface); font-weight: 600; padding: 0 12px; }
+.controls button:disabled { opacity: .35; cursor: default; }
+.controls .primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.controls .primary.p0 { background: var(--p0); color: var(--p0-ink); border-color: var(--p0); }
+.controls .primary.p1 { background: var(--p1); color: var(--p1-ink); border-color: var(--p1); }
+
+/* ---------- History ---------- */
+.hist { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+.trend { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 14px 14px 10px; }
+.trend svg { display: block; width: 100%; height: 120px; }
+.trend .cap { font-size: 12px; color: var(--muted); margin: 0 0 6px; }
+.hitem {
+  display: grid; grid-template-columns: 62px 1fr; gap: 14px; align-items: center;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px;
+}
+.hitem .p { font-family: var(--f-display); font-weight: 600; font-size: 26px; font-variant-numeric: tabular-nums; }
+.hitem > div { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.hitem .meta { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; color: var(--muted); }
+.hitem .split { font-size: 13px; }
+.delta { font-weight: 600; font-variant-numeric: tabular-nums; }
+.delta.up { color: var(--accent); }
+.empty { color: var(--muted); text-align: center; margin: 40px auto; max-width: 30ch; }
+
+.pop { animation: pop .35s ease-out; }
+@keyframes pop { from { transform: translateY(10px); opacity: .3; } }
+@media (prefers-reduced-motion: reduce) { .pop { animation: none; } .track i { transition: none; } }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HOME -->
+  <section class="screen" id="home">
+    <header class="brand">
+      <h1><span class="a" id="hA">Thức</span><span class="h">,</span> <span class="h">hay</span> <span class="b" id="hB">Ngân</span><span class="h">?</span></h1>
+      <p>Một người bí mật chọn câu trả lời về chính mình, người kia đoán. Mười câu, xem ai hiểu ai hơn.</p>
+    </header>
+
+    <div>
+      <p class="label">Hai người chơi</p>
+      <div class="names">
+        <input id="nameA" type="text" maxlength="14" placeholder="Tên người 1" autocomplete="off">
+        <span class="amp">&amp;</span>
+        <input id="nameB" type="text" maxlength="14" placeholder="Tên người 2" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="stack">
+      <button class="start" id="startBtn" type="button">
+        <strong id="startTitle">Bắt đầu ván mới</strong>
+        <span id="startSub">10 câu · mỗi người đoán 5 câu · khoảng 15 phút</span>
+      </button>
+      <div class="row-links">
+        <button class="ghost" id="openHistory" type="button">Lịch sử điểm</button>
+        <button class="ghost danger" id="askNew" type="button" hidden>Chơi ván mới từ đầu</button>
+      </div>
+      <div class="confirm" id="newConfirm" hidden>
+        <span>Bỏ ván đang chơi dở?</span>
+        <button class="yes" id="doNew" type="button">Chơi ván mới</button>
+        <button class="ghost" id="cancelNew" type="button">Thôi</button>
+      </div>
+    </div>
+
+    <div id="lastBox"></div>
+
+    <div>
+      <p class="label">Cách chơi</p>
+      <ul class="rules">
+        <li><b>1</b><span>Đưa máy cho người được hỏi. Người kia nhìn đi chỗ khác.</span></li>
+        <li><b>2</b><span>Người được hỏi bí mật chọn câu trả lời thật của mình, rồi bấm Chốt.</span></li>
+        <li><b>3</b><span>Đưa máy cho người kia đoán. Đoán trúng được 1 điểm.</span></li>
+        <li><b>4</b><span>Lật kết quả và kể cho nhau nghe vì sao. Câu sau đổi vai.</span></li>
+      </ul>
+    </div>
+
+    <p class="foot">Điểm được lưu trên máy này. Chơi lại sau vài tháng để xem hai bạn hiểu nhau thêm bao nhiêu.</p>
+  </section>
+
+  <!-- GAME -->
+  <section class="screen" id="game" hidden>
+    <div class="topbar">
+      <button class="icon-btn" id="gameBack" type="button" aria-label="Về trang chính">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div>
+        <div class="progress" id="progress" aria-live="polite"></div>
+        <div class="dots" id="dots"></div>
+      </div>
+      <span></span>
+    </div>
+    <div class="scores" id="scores"></div>
+    <div class="stage" id="stage"></div>
+    <div class="controls" id="controls"></div>
+  </section>
+
+  <!-- HISTORY -->
+  <section class="screen" id="history" hidden>
+    <div class="topbar">
+      <button class="icon-btn" id="historyBack" type="button" aria-label="Về trang chính">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <h2>Lịch sử điểm</h2>
+      <span></span>
+    </div>
+    <div class="hist" id="hist"></div>
+  </section>
+</div>
+
+<script>
+// {X} = the person being asked about
+const QS = [
+  { q: "Khi buồn, {X} muốn ăn gì nhất?", o: ["Trà sữa", "Đồ thật cay", "Bánh ngọt, kem", "Chẳng muốn ăn gì"] },
+  { q: "{X} sợ con gì nhất?", o: ["Gián", "Chuột", "Rắn", "Nhện"] },
+  { q: "Ngày nghỉ lý tưởng của {X} là?", o: ["Ngủ tới trưa", "Cà phê với bạn bè", "Đi chơi xa", "Ở nhà cày phim"] },
+  { q: "{X} dễ cáu nhất khi nào?", o: ["Bị trễ hẹn", "Tin nhắn trả lời chậm", "Ý kiến bị phớt lờ", "Đang đói"] },
+  { q: "Trúng số 1 tỷ, việc đầu tiên {X} làm là?", o: ["Đi du lịch", "Gửi tiết kiệm, đầu tư", "Mua quà cho gia đình", "Mua món đồ mơ ước"] },
+  { q: "{X} thích được khen điều gì nhất?", o: ["Ngoại hình", "Sự thông minh", "Sự tử tế", "Tài lẻ, kỹ năng"] },
+  { q: "Mùa {X} thích nhất trong năm?", o: ["Xuân", "Hạ", "Thu", "Đông"] },
+  { q: "Lúc giận nhau, {X} thường làm gì?", o: ["Im lặng một lúc", "Muốn nói rõ ngay", "Đi chỗ khác cho bình tĩnh", "Làm lành bằng hành động"] },
+  { q: "Buổi hẹn {X} thích nhất là?", o: ["Ăn tối nhà hàng xinh", "Ăn vỉa hè", "Đi xem phim", "Đi dạo không mục đích"] },
+  { q: "Thói quen xấu nào {X} khó bỏ nhất?", o: ["Thức khuya", "Lướt điện thoại", "Để nước tới chân mới nhảy", "Ăn vặt"] },
+  { q: "Món quà làm {X} vui nhất?", o: ["Đồ tự làm, thư tay", "Thứ đang thật sự cần", "Một chuyến đi", "Bất ngờ không cần dịp"] },
+  { q: "{X} là người của buổi nào?", o: ["Dậy sớm tràn năng lượng", "Cú đêm chính hiệu", "Tùy hôm", "Lúc nào cũng buồn ngủ"] },
+  { q: "Được chọn nơi sống, {X} chọn?", o: ["Đà Lạt", "Thành phố lớn sôi động", "Một nước châu Âu", "Nhật hoặc Hàn"] },
+  { q: "Đồ uống ruột của {X}?", o: ["Cà phê", "Trà sữa", "Nước ép, sinh tố", "Trà"] },
+  { q: "Khi ốm, {X} muốn gì nhất?", o: ["Được chăm sóc tận tình", "Được để yên ngủ", "Có người mua cháo, thuốc", "Vẫn cố làm việc"] },
+  { q: "Thể loại phim {X} mê nhất?", o: ["Tình cảm", "Hành động", "Kinh dị", "Hài"] },
+  { q: "Điều {X} để ý đầu tiên ở một người?", o: ["Nụ cười", "Đôi mắt", "Cách nói chuyện", "Cách ăn mặc"] },
+  { q: "{X} tiêu tiền nhiều nhất vào?", o: ["Ăn uống", "Quần áo, làm đẹp", "Đồ công nghệ", "Du lịch, trải nghiệm"] },
+  { q: "Nếu là một con vật, {X} là?", o: ["Mèo", "Chó", "Gấu trúc", "Cáo"] },
+  { q: "Lúc căng thẳng, {X} giải tỏa bằng?", o: ["Nghe nhạc", "Ngủ một giấc", "Ăn", "Tâm sự với ai đó"] },
+  { q: "{X} thích nhắn tin kiểu nào?", o: ["Tin dài tâm sự", "Tin ngắn liên tục", "Sticker và meme", "Thích gọi hơn nhắn"] },
+  { q: "Kỷ niệm hai đứa {X} thích nhất là?", o: ["Lần đầu gặp nhau", "Một chuyến đi chơi", "Một buổi tối bình thường", "Lần làm lành sau giận"] },
+  { q: "Việc nhà {X} ghét nhất?", o: ["Rửa bát", "Giặt phơi đồ", "Lau nhà", "Dọn tủ"] },
+  { q: "Màu {X} thích nhất?", o: ["Đen hoặc trắng", "Xanh dương", "Hồng hoặc đỏ", "Xanh lá hoặc be"] },
+  { q: "Mơ ước lớn nhất hiện tại của {X} nghiêng về?", o: ["Sự nghiệp", "Tài chính ổn định", "Gia đình", "Tự do trải nghiệm"] },
+  { q: "Trong nhóm bạn, {X} là người?", o: ["Pha trò", "Lắng nghe", "Lên kế hoạch", "Luôn đến trễ"] },
+  { q: "Món {X} không bao giờ ăn được?", o: ["Sầu riêng", "Mắm tôm", "Nội tạng", "Rau mùi"] },
+  { q: "Đi du lịch, {X} thích kiểu?", o: ["Lên lịch thật chi tiết", "Tới đâu tính tới đó", "Nghỉ dưỡng nằm im", "Đi càng nhiều nơi càng tốt"] },
+  { q: "{X} hay thể hiện tình cảm bằng cách nào?", o: ["Lời nói", "Làm giúp việc gì đó", "Tặng quà", "Ôm, nắm tay"] },
+  { q: "Điều {X} sợ nhất trong tình yêu?", o: ["Bị lừa dối", "Nhạt dần", "Không được thấu hiểu", "Phải xa nhau"] },
+  { q: "Lúc ngủ, {X} hay?", o: ["Ôm gối hoặc thú bông", "Đắp chăn kín dù trời nóng", "Lăn khắp giường", "Nằm im một tư thế"] },
+  { q: "Đi karaoke, {X} hay chọn?", o: ["Ballad buồn", "Nhạc sôi động", "Nhạc xưa, bolero", "Chỉ ngồi nghe"] },
+  { q: "Điều gì làm {X} cười nhiều nhất?", o: ["Clip hài, meme", "Chuyện người kia kể", "Trò đùa ngớ ngẩn", "Bị cù lét"] },
+  { q: "{X} thích nhất điểm nào ở người kia?", o: ["Đôi mắt", "Nụ cười", "Đôi tay", "Giọng nói"] },
+  { q: "Món {X} nấu ngon nhất?", o: ["Mì gói", "Trứng chiên", "Một món tủ riêng", "Chưa nấu gì ngon"] },
+  { q: "Được quay về một quãng tuổi, {X} chọn?", o: ["Tuổi thơ", "Thời học sinh", "Thời sinh viên", "Không muốn quay lại"] },
+  { q: "Điều {X} trân trọng nhất ở mối quan hệ này?", o: ["Sự bình yên", "Tiếng cười", "Sự tin tưởng", "Được là chính mình"] },
+  { q: "Có tin vui, {X} kể cho ai đầu tiên?", o: ["Người yêu", "Gia đình", "Bạn thân", "Đăng lên mạng"] },
+  { q: "App {X} mở nhiều nhất mỗi ngày?", o: ["TikTok", "Facebook, Messenger", "Instagram", "YouTube"] },
+  { q: "Năm tới, {X} muốn hai đứa cùng làm gì nhất?", o: ["Đi du lịch xa", "Học chung một thứ mới", "Ra mắt gia đình hai bên", "Tiết kiệm cho một mục tiêu"] }
+];
+const ROUND = 10;
+const KEYS = ["A", "B", "C", "D"];
+const KEY = "thuchayngan.v1";
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+/* ---------- Storage ---------- */
+let store = { a: "Thức", b: "Ngân", used: [], game: null, history: [] };
+try {
+  const raw = localStorage.getItem(KEY);
+  if (raw) store = Object.assign(store, JSON.parse(raw));
+} catch (e) {}
+function save() { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} }
+
+const names = () => [store.a.trim() || "Người 1", store.b.trim() || "Người 2"];
+const initial = s => [...s.trim()][0] ? [...s.trim()][0].toUpperCase() : "?";
+
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+
+/* ---------- Game state ----------
+   game: { qs:[index], i, phase: hand1|answer|hand2|guess|reveal|done, ans, pick, score:[p0,p1], log:[bool], saved }
+   Question i is about person (i % 2); the other person guesses.
+   score[p] = how many times p guessed the other correctly.            */
+function newGame() {
+  const all = QS.map((_, i) => i);
+  const used = new Set(store.used);
+  let fresh = shuffle(all.filter(i => !used.has(i)));
+  if (fresh.length < ROUND) { store.used = []; fresh = fresh.concat(shuffle(all.filter(i => !fresh.includes(i)))); }
+  const qs = fresh.slice(0, ROUND);
+  store.used = store.used.concat(qs);
+  store.game = { qs, i: 0, phase: "hand1", ans: null, pick: null, score: [0, 0], log: [], saved: false };
+  save();
+}
+const G = () => store.game;
+const subject = () => G().i % 2;
+const guesser = () => 1 - subject();
+const curQ = () => QS[G().qs[G().i]];
+const qFor = who => curQ().q.replace("{X}", esc(names()[who]));
+
+let selected = null; // option chosen on screen, before "Chốt"
+
+function setPhase(p) { G().phase = p; selected = null; save(); render(); }
+
+function lock() {
+  const g = G();
+  if (selected === null) return;
+  if (g.phase === "answer") { g.ans = selected; setPhase("hand2"); }
+  else if (g.phase === "guess") {
+    g.pick = selected;
+    const hit = g.pick === g.ans;
+    if (hit) g.score[guesser()]++;
+    g.log.push(hit);
+    setPhase("reveal");
+  }
+}
+function nextQ() {
+  const g = G();
+  if (g.i + 1 >= ROUND) { finish(); return; }
+  g.i++; g.ans = null; g.pick = null;
+  setPhase("hand1");
+}
+function finish() {
+  const g = G();
+  if (!g.saved) {
+    const [a, b] = names();
+    store.history.push({ d: new Date().toISOString(), a, b, s: g.score.slice(), n: ROUND });
+    g.saved = true;
+  }
+  setPhase("done");
+}
+
+const pct = e => Math.round((e.s[0] + e.s[1]) / e.n * 100);
+function verdict(p) {
+  if (p >= 90) return "Đọc vị nhau như sách mở";
+  if (p >= 70) return "Hiểu nhau rất rõ rồi đó";
+  if (p >= 50) return "Đang hiểu nhau từng chút";
+  if (p >= 30) return "Còn nhiều điều để khám phá";
+  return "Mỗi ngày vẫn là một bất ngờ";
+}
+
+/* ---------- Render: game ---------- */
+const ICON_OK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>`;
+const ICON_NO = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 7l10 10M17 7L7 17"/></svg>`;
+
+function render() {
+  const g = G();
+  const nm = names();
+  const s = subject(), gs = guesser();
+
+  $("progress").innerHTML = g.phase === "done" ? "<b>Kết quả</b>" : `Câu <b>${g.i + 1}</b> / ${ROUND}`;
+  $("dots").innerHTML = [...Array(ROUND)].map((_, k) =>
+    `<i class="${k < g.log.length ? (g.log[k] ? "hit" : "miss") : k === g.i && g.phase !== "done" ? "now" : ""}"></i>`).join("");
+  $("scores").innerHTML = nm.map((n, p) =>
+    `<div class="score p${p}"><span>${esc(n)}</span><b>${g.score[p]}</b></div>`).join("");
+  $("scores").hidden = g.phase === "done";
+
+  const stage = $("stage"), ctr = $("controls");
+  ctr.className = "controls";
+
+  if (g.phase === "hand1" || g.phase === "hand2") {
+    const who = g.phase === "hand1" ? s : gs;
+    const other = 1 - who;
+    stage.innerHTML = `<div class="handoff pop">
+      <div class="avatar p${who}">${esc(initial(nm[who]))}</div>
+      <h2>Đưa máy cho ${esc(nm[who])}</h2>
+      <p>${g.phase === "hand1"
+        ? `Câu này hỏi về ${esc(nm[who])}. Hãy chọn câu trả lời thật của mình.`
+        : `${esc(nm[other])} đã chốt đáp án. Giờ tới lượt ${esc(nm[who])} đoán.`}</p>
+      <span class="eyes">${esc(nm[other])} nhìn đi chỗ khác nhé</span>
+    </div>`;
+    ctr.innerHTML = `<button type="button" class="primary p${who}" id="goBtn">Mình là ${esc(nm[who])}, sẵn sàng</button>`;
+    $("goBtn").onclick = () => setPhase(g.phase === "hand1" ? "answer" : "guess");
+  }
+
+  else if (g.phase === "answer" || g.phase === "guess") {
+    const who = g.phase === "answer" ? s : gs;
+    const q = curQ();
+    const role = g.phase === "answer" ? `${esc(nm[s])} trả lời thật` : `${esc(nm[gs])} đoán`;
+    const text = g.phase === "answer"
+      ? qFor(s)
+      : `${qFor(s)}<br><span style="font-size:.7em;color:var(--muted);font-style:italic">${esc(nm[s])} đã chọn gì?</span>`;
+    stage.innerHTML = `<div class="qhead pop"><span class="role p${who}">${role}</span><h2>${text}</h2></div>
+      <div class="options" style="--sel:var(--p${who});--sel-ink:var(--p${who}-ink)">
+        ${q.o.map((o, k) => `<button type="button" class="opt" data-k="${k}"><span class="k">${KEYS[k]}</span><span>${esc(o)}</span></button>`).join("")}
+      </div>`;
+    stage.querySelectorAll(".opt").forEach(b => b.onclick = () => {
+      selected = +b.dataset.k;
+      stage.querySelectorAll(".opt").forEach(x => x.classList.toggle("sel", x === b));
+      $("lockBtn").disabled = false;
+    });
+    ctr.innerHTML = `<button type="button" class="primary p${who}" id="lockBtn" disabled>${g.phase === "answer" ? "Chốt, giấu đáp án" : "Chốt câu đoán"}</button>`;
+    $("lockBtn").onclick = lock;
+  }
+
+  else if (g.phase === "reveal") {
+    const q = curQ();
+    const hit = g.ans === g.pick;
+    stage.innerHTML = `<div class="verdict ${hit ? "hit" : "miss"} pop">
+        <div class="badge">${hit ? ICON_OK : ICON_NO}</div>
+        <h2>${hit ? "Đoán trúng!" : "Trật rồi"}</h2>
+        <p>${hit ? `${esc(nm[gs])} được thêm 1 điểm` : `${esc(nm[gs])} chưa đọc được ý lần này`}</p>
+      </div>
+      <p class="qrecap">${qFor(s)}</p>
+      <div class="compare">
+        <div class="row"><span class="bar" style="background:var(--p${s})"></span><div><small>${esc(nm[s])} chọn</small><span>${esc(q.o[g.ans])}</span></div></div>
+        <div class="row"><span class="bar" style="background:var(--p${gs})"></span><div><small>${esc(nm[gs])} đoán</small><span>${esc(q.o[g.pick])}</span></div></div>
+      </div>
+      <p class="talk">${hit ? `${esc(nm[gs])} kể xem vì sao đoán được nhé.` : `${esc(nm[s])} kể lý do cho ${esc(nm[gs])} nghe đi.`}</p>`;
+    ctr.innerHTML = `<button type="button" class="primary" id="nextBtn">${g.i + 1 >= ROUND ? "Xem kết quả" : "Câu tiếp theo"}</button>`;
+    $("nextBtn").onclick = nextQ;
+  }
+
+  else if (g.phase === "done") {
+    const e = store.history[store.history.length - 1];
+    const p = pct(e);
+    const prev = store.history.length > 1 ? store.history[store.history.length - 2] : null;
+    const per = ROUND / 2;
+    const cmp = prev ? (() => { const d = p - pct(prev); return `Lần trước ${pct(prev)}% · ${d > 0 ? "tăng " + d : d < 0 ? "giảm " + (-d) : "giữ nguyên"}${d ? " điểm %" : ""}`; })() : "Ván đầu tiên được lưu vào lịch sử";
+    const lead = g.score[0] === g.score[1] ? `Hai bạn <b>hòa nhau</b>, hiểu nhau ngang ngửa.`
+      : `<b>${esc(nm[g.score[0] > g.score[1] ? 0 : 1])}</b> hiểu người kia hơn ván này.`;
+    stage.innerHTML = `<div class="result-hero pop">
+        <span class="lbl">Độ hiểu nhau</span>
+        <div class="pct">${p}<small>%</small></div>
+        <h2>${verdict(p)}</h2>
+        <p>${cmp}</p>
+      </div>
+      <div class="meters">
+        ${[0, 1].map(k => `<div class="meter">
+          <div class="top"><span>${esc(nm[k])} hiểu ${esc(nm[1 - k])}</span><b>${g.score[k]}/${per}</b></div>
+          <div class="track"><i style="width:0;background:var(--p${k})" data-w="${g.score[k] / per * 100}"></i></div>
+        </div>`).join("")}
+      </div>
+      <p class="crown">${lead}</p>`;
+    const bars = stage.querySelectorAll(".track i");
+    void stage.offsetWidth; // commit width:0 so the fill animates
+    setTimeout(() => bars.forEach(i => i.style.width = i.dataset.w + "%"), 30);
+    ctr.className = "controls two";
+    ctr.innerHTML = `<button type="button" id="histBtn">Lịch sử điểm</button><button type="button" class="primary" id="againBtn">Chơi ván mới</button>`;
+    $("histBtn").onclick = () => go("history");
+    $("againBtn").onclick = () => { newGame(); render(); };
+  }
+  stage.scrollTop = 0;
+}
+
+/* ---------- History ---------- */
+function renderHistory() {
+  const h = store.history;
+  const box = $("hist");
+  if (!h.length) {
+    box.innerHTML = `<p class="empty">Chưa có ván nào. Chơi xong một ván, điểm sẽ được lưu ở đây để hai bạn so sau vài tháng.</p>`;
+    return;
+  }
+  let trend = "";
+  if (h.length >= 2) {
+    const W = 300, H = 110, pad = 14;
+    const pts = h.map((e, i) => [pad + i * (W - 2 * pad) / (h.length - 1), H - pad - pct(e) / 100 * (H - 2 * pad)]);
+    trend = `<div class="trend"><p class="cap">Độ hiểu nhau qua các ván (0–100%)</p>
+      <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
+        <line x1="${pad}" x2="${W - pad}" y1="${H / 2}" y2="${H / 2}" stroke="var(--line)" stroke-dasharray="3 4"/>
+        <polyline points="${pts.map(p => p.join(",")).join(" ")}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+        ${pts.map((p, i) => `<circle cx="${p[0]}" cy="${p[1]}" r="${i === pts.length - 1 ? 5 : 3.5}" fill="var(--accent)"/>`).join("")}
+      </svg></div>`;
+  }
+  const fmt = iso => { const d = new Date(iso); return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`; };
+  box.innerHTML = trend + h.map((e, i) => ({ e, i })).reverse().map(({ e, i }) => {
+    const p = pct(e), prev = i > 0 ? pct(h[i - 1]) : null, d = prev === null ? null : p - prev;
+    const per = e.n / 2;
+    return `<div class="hitem">
+      <span class="p">${p}%</span>
+      <div>
+        <div class="meta"><span>${fmt(e.d)}</span>${d === null ? "" : `<span class="delta${d > 0 ? " up" : ""}">${d > 0 ? "+" : ""}${d}</span>`}</div>
+        <div class="split">${esc(e.a)} hiểu ${esc(e.b)} <b>${e.s[0]}/${per}</b> · ${esc(e.b)} hiểu ${esc(e.a)} <b>${e.s[1]}/${per}</b></div>
+        <div class="track" style="height:6px"><i style="width:${p}%;background:var(--accent)"></i></div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+/* ---------- Home ---------- */
+function renderHome() {
+  $("nameA").value = store.a;
+  $("nameB").value = store.b;
+  const [a, b] = names();
+  $("hA").textContent = a; $("hB").textContent = b;
+  const g = store.game;
+  const inProgress = g && g.phase !== "done" && (g.i > 0 || g.phase !== "hand1");
+  $("startTitle").textContent = inProgress ? "Chơi tiếp" : "Bắt đầu ván mới";
+  $("startSub").textContent = inProgress ? `Đang ở câu ${g.i + 1}/${ROUND} · ${a} ${g.score[0]} – ${g.score[1]} ${b}` : "10 câu · mỗi người đoán 5 câu · khoảng 15 phút";
+  $("askNew").hidden = !inProgress;
+  $("newConfirm").hidden = true;
+  const h = store.history;
+  $("openHistory").textContent = h.length ? `Lịch sử điểm (${h.length} ván)` : "Lịch sử điểm";
+  if (h.length) {
+    const e = h[h.length - 1];
+    $("lastBox").innerHTML = `<p class="label">Ván gần nhất</p><div class="last"><span class="p">${pct(e)}%</span>
+      <div><b>${verdict(pct(e))}</b><small>${esc(e.a)} ${e.s[0]} – ${e.s[1]} ${esc(e.b)} · ${new Date(e.d).toLocaleDateString("vi-VN")}</small></div></div>`;
+  } else $("lastBox").innerHTML = "";
+}
+
+function go(screen) {
+  ["home", "game", "history"].forEach(s => $(s).hidden = s !== screen);
+  if (screen === "home") renderHome();
+  if (screen === "game") render();
+  if (screen === "history") renderHistory();
+}
+
+$("nameA").addEventListener("input", e => { store.a = e.target.value; save(); $("hA").textContent = names()[0]; });
+$("nameB").addEventListener("input", e => { store.b = e.target.value; save(); $("hB").textContent = names()[1]; });
+$("startBtn").onclick = () => {
+  const g = store.game;
+  if (!g || g.phase === "done") newGame();
+  go("game");
+};
+$("askNew").onclick = () => { $("newConfirm").hidden = false; };
+$("cancelNew").onclick = () => { $("newConfirm").hidden = true; };
+$("doNew").onclick = () => { newGame(); go("game"); };
+$("openHistory").onclick = () => go("history");
+$("historyBack").onclick = () => go("home");
+$("gameBack").onclick = () => go("home");
+
+/* ---------- Android (Capacitor) ---------- */
+(() => {
+  const P = window.Capacitor && window.Capacitor.Plugins;
+  if (!P) return;
+  if (P.App) P.App.addListener("backButton", () => {
+    if (!$("home").hidden) P.App.exitApp();
+    else go("home");
+  });
+  if (P.StatusBar) {
+    const mq = matchMedia("(prefers-color-scheme: dark)");
+    const apply = () => {
+      const dark = mq.matches;
+      P.StatusBar.setStyle({ style: dark ? "DARK" : "LIGHT" }).catch(() => {});
+      P.StatusBar.setBackgroundColor({ color: dark ? "#0F1B1D" : "#EFF3F2" }).catch(() => {});
+    };
+    apply();
+    mq.addEventListener("change", apply);
+  }
+})();
+
+go("home");
+</script>
+</body>
+</html>

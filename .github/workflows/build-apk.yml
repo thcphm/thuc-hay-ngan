@@ -1,0 +1,63 @@
+name: Build APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Install
+        run: npm ci
+
+      - name: Copy fonts
+        run: npm run build
+
+      - name: Create Android project
+        run: npx cap add android
+
+      - name: Generate T&N icon and splash
+        run: npx capacitor-assets generate --android
+
+      - name: Sync web code
+        run: npx cap sync android
+
+      - name: Build APK
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - name: Rename APK
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk ThucHayNgan.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ThucHayNgan-apk
+          path: ThucHayNgan.apk
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: "Thức, hay Ngân? v1.0.${{ github.run_number }}"
+          body: Tải file ThucHayNgan.apk bên dưới và cài trên điện thoại Android.
+          files: ThucHayNgan.apk
+          make_latest: true
